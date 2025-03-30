@@ -1,7 +1,9 @@
 ---
 style: sspai.css
+author: PhillipsGao
+title: AI个性化学习案例
 ---
-![文章头图](pic/banner.png)
+![文章头图](pic/banner_.jpg)
 
 # AI个性化学习案例
 
@@ -17,8 +19,9 @@ style: sspai.css
 ## 英语
 
 ## 物理
+1. [杠杆题(直接回答)](physics/lever.html)
 1. [杠杆题(苏格拉底提问法)](physics/lever_socrates.html)
-2. [杠杆题(直接回答)](physics/lever.html)
+1. [质量密度公式(苏格拉底提问法)](physics/roumv_socrates.html)
 
 ## 化学
 
