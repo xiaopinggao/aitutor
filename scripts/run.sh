@@ -8,7 +8,7 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # 定义源目录和目标目录
 SRC_DIR="$ROOT_DIR/src"
-HTML_DIR="$ROOT_DIR/html"
+HTML_DIR="$ROOT_DIR/docs"
 
 # 创建目标目录（如果不存在）
 mkdir -p "$HTML_DIR"

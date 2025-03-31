@@ -262,3 +262,9 @@ a:target {
 	border: 0;
 	outline: 0;
 }
+#header-banner {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0;
+}

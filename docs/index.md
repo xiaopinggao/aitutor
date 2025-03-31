@@ -3,7 +3,7 @@ style: sspai.css
 author: PhillipsGao
 title: AI个性化学习案例
 ---
-![文章头图](pic/banner_.jpg)
+![文章头图](pic/banner_.jpg){#header-banner}
 
 # AI个性化学习案例
 
