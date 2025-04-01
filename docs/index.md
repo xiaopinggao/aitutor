@@ -1,9 +1,11 @@
 ---
-style: sspai.css
 author: PhillipsGao
 title: AI个性化学习案例
 ---
-![文章头图](pic/banner_.jpg){#header-banner}
+<link rel="stylesheet" href="css/sspai.css">
+<div id="header-greybox"></div>
+
+![文章头图](pic/banner.png){#header-banner}
 
 # AI个性化学习案例
 
@@ -53,3 +55,7 @@ title: AI个性化学习案例
 ## 绘画
 
 ## 动画
+
+<div id="footer">
+  <p>© 2025 豆荚AI学堂出品</p>
+</div>

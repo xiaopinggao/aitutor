@@ -15,6 +15,20 @@ import logging
 # 设置日志配置
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
+def remove_csp_meta(html_content):
+    """
+    移除网页 head 中的 http-equiv="content-security-policy" 这个 meta 字段
+    :param html_content: 输入的 HTML 内容
+    :return: 处理后的 HTML 内容
+    """
+    soup = BeautifulSoup(html_content, 'html.parser')
+    csp_meta = soup.find('meta', attrs={'http-equiv': 'content-security-policy'})
+    if csp_meta:
+        csp_meta.decompose()
+    return str(soup)
+
+
 def remove_specific_divs(html_content, css_selectors):
     """
     移除指定的 <div> 标签及其内容
@@ -44,6 +58,14 @@ def add_banner_and_footer(html_content, banner_path, footer_path):
             banner = BeautifulSoup(f.read(), 'html.parser')
         with open(footer_path, 'r', encoding='utf-8') as f:
             footer = BeautifulSoup(f.read(), 'html.parser')
+
+        # 提取 html_content 中的标题
+        title_tag = soup.find('title')
+        title_text = title_tag.string if title_tag else '默认标题'
+
+        # 替换 banner 中的 __TITLE__ 字符串
+        for tag in banner.find_all(string=lambda text: text and '__TITLE__' in text):
+            tag.replace_with(tag.replace('__TITLE__', title_text))
 
         # 找到特定的 div，插入banner和footer
         target_div = soup.select_one('div[class*="message-list-"] > div[data-testid="scroll_view"]')

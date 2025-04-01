@@ -1,0 +1,42 @@
+.highlight {
+    background-color: rgba(255, 255, 0, 0.3);
+    transition: background-color 1s ease;
+}
+.send-message-animation {
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+#page-footer {
+    text-align: center;
+    margin: 0.5em 0 0.5em 0;
+    font-size: 14px;
+    width: 100%;
+    border-top: 1px solid darkgray;
+}
+#page-banner {
+    text-align: center;
+    margin: 0.5em 0 0.5em 0;
+    font-size: 14px;
+    width: 100%;
+    border-bottom: 1px solid darkgray;
+}
+#page-banner .banner-button{
+    width: 4em;
+    font-size: 1.5em;
+}
+#page-banner .banner-button a{
+    text-decoration: none;
+    color: inherit;
+}
+#page-banner h1{
+    flex-grow: 1;
+    text-align: center;
+}

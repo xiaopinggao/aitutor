@@ -15,7 +15,7 @@ Date: 2025-3-30
 import os
 import sys
 import logging
-from html_utils import remove_specific_divs, add_banner_and_footer
+from html_utils import remove_csp_meta, remove_specific_divs, add_banner_and_footer
 
 # 设置日志配置
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -42,6 +42,9 @@ def process_html_file(input_file, output_file, banner_path, footer_path):
             'div[data-testid="chat_input"]',
             ]
         html_content = remove_specific_divs(html_content, css_selectors)
+
+        # 移除 CSP meta 标签
+        html_content = remove_csp_meta(html_content)
 
         # 添加 banner 和 footer
         html_content = add_banner_and_footer(html_content, banner_path, footer_path)
