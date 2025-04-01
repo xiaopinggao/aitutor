@@ -16,17 +16,23 @@
 }
 #page-footer {
     text-align: center;
-    margin: 0.5em 0 0.5em 0;
+    /* margin: 1em 0 1em 0; */
+    padding: 0.5em 0 0.5em 0;
     font-size: 14px;
     width: 100%;
-    border-top: 1px solid darkgray;
+    border-top: 1px solid gainsboro;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1); /* 添加朝上的阴影效果 */
 }
 #page-banner {
     text-align: center;
-    margin: 0.5em 0 0.5em 0;
     font-size: 14px;
     width: 100%;
-    border-bottom: 1px solid darkgray;
+    border-bottom: 1px solid gainsboro;
+    background: linear-gradient(0deg, #f4f4f4, #f4f4f4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
 }
 #page-banner .banner-button{
     width: 4em;
@@ -36,7 +42,14 @@
     text-decoration: none;
     color: inherit;
 }
-#page-banner h1{
+#page-banner h1 {
     flex-grow: 1;
     text-align: center;
+    font-size: 2em; /* 默认字体大小 */
+}
+
+@media (max-width: 600px) {
+    #page-banner h1 {
+        font-size: 1.5em; /* 缩小 h1 标题的字体大小 */
+    }
 }

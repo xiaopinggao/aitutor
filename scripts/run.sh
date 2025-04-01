@@ -26,5 +26,6 @@ find "$SRC_DIR" -type f -name "*.html" -not -name "index.html" | while read -r f
     # 构建输出文件路径
     output_file="$HTML_DIR/$relative_path"
     # 调用process_html.py处理文件
+    echo python "$SCRIPT_DIR/process_html.py" "$file" "$output_file" --banner_path "$SRC_DIR/banner.txt" --footer_path "$SRC_DIR/footer.txt"
     python "$SCRIPT_DIR/process_html.py" "$file" "$output_file" --banner_path "$SRC_DIR/banner.txt" --footer_path "$SRC_DIR/footer.txt"
 done

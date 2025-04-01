@@ -276,11 +276,11 @@ a:target {
     top: 0;
     left: 0;
     z-index: -1;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
 }
 #footer {
     text-align: center;
-    margin: 1em 0 1em 0;
 	padding: 0.5em 0 0.5em 0;
     font-size: 14px;
-	border-top: 1px solid darkgray;
+	border-top: 1px solid gainsboro;
   }

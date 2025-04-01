@@ -1,4 +1,4 @@
-<div id="page-banner" style="display: flex; justify-content: space-between; align-items: center;">
+<div id="page-banner">
   <div class="banner-button">
     <a href="../index.html">
       <i class="fas fa-home"></i>

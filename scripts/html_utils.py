@@ -78,3 +78,24 @@ def add_banner_and_footer(html_content, banner_path, footer_path):
     except Exception as e:
         logging.error(f"读取 banner 或 footer 文件时出错: {e}")
     return str(soup)
+
+
+def insert_default_resources(html_content):
+    """
+    将默认的 CSS 和 JavaScript 文件插入到 HTML 文件的 <head> 区块中，紧跟在 <title> 标签之后
+    :param html_content: 输入的 HTML 内容
+    :return: 插入了默认资源的 HTML 内容
+    """
+    soup = BeautifulSoup(html_content, 'html.parser')
+    title_tag = soup.find('title')
+    if title_tag:
+        # 创建新的 script 和 link 标签
+        script_tag = soup.new_tag('script', src="../doubao_chatbot.js")
+        link_chat_styles = soup.new_tag('link', href="../css/chat_styles.css", rel="stylesheet")
+        link_font_awesome = soup.new_tag('link', href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.2.1/css/all.min.css", rel="stylesheet")
+
+        # 将新的标签插入到 title 标签之后
+        title_tag.insert_after(script_tag)
+        script_tag.insert_after(link_chat_styles)
+        link_chat_styles.insert_after(link_font_awesome)
+    return str(soup)
