@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // 获取所有提问和回答的 div 元素
-    const msg_list_ele = document.querySelector('[data-testid="message-list"]')
-    const allMessages = document.querySelectorAll('div[data-testid="union_message"]');
+    const msg_list_ele = document.querySelector('[data-testid="message-list"]');
+    const allMessages = Array.from(document.querySelectorAll('div[data-testid="union_message"]')).map(msg => msg.parentNode.parentNode.parentNode);
 
     let currentIndex = 0;
     let displayMode = 'all'; // 默认展示所有消息
@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
         currentIndex = 0;
-        allMessages[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
 
     // 显示下一条消息的函数
@@ -26,31 +25,31 @@ document.addEventListener('DOMContentLoaded', function () {
             currentIndex++;
             const message = allMessages[currentIndex];
             message.style.display = 'block';
-            message.classList.add('highlight');
+            // messageContentDiv是严格的消息内容div
+            const messageContentDiv = message.querySelector('div[data-testid="message_content"]');
 
             // 发送消息的内容不逐字打印
             const sendMessageDiv = message.querySelector('div[data-testid="send_message"]');
             if (sendMessageDiv) {
                 // 使用整体发送的动态样式
-                message.classList.add('send-message-animation');
+                messageContentDiv.classList.add('send-message-animation');
                 setTimeout(() => {
-                    message.classList.remove('highlight');
-                    message.classList.remove('send-message-animation');
-                    message.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    messageContentDiv.classList.remove('send-message-animation');
                 }, 1000); // 动画持续时间
                 return;
             }
 
+            messageContentDiv.classList.add('highlight');
             // 获取消息的原始 HTML 内容
-            const originalHTML = message.dataset.originalHtml || message.innerHTML;
-            message.dataset.originalHtml = originalHTML;
+            const originalHTML = messageContentDiv.dataset.originalHtml || messageContentDiv.innerHTML;
+            messageContentDiv.dataset.originalHtml = originalHTML;
 
             // 创建一个临时容器来解析 HTML
             const tempContainer = document.createElement('div');
             tempContainer.innerHTML = originalHTML;
 
             // 清空消息内容
-            message.innerHTML = '';
+            messageContentDiv.innerHTML = '';
 
             async function typeNode(node, target) {
                 if (node.nodeType === Node.TEXT_NODE) {
@@ -83,9 +82,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            typeNode(tempContainer, message).then(() => {
-                message.classList.remove('highlight');
-                message.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            typeNode(tempContainer, messageContentDiv).then(() => {
+                setTimeout(() => {
+                    messageContentDiv.classList.remove('highlight');
+                }, 300);
             });
         }
     }
@@ -104,12 +104,11 @@ document.addEventListener('DOMContentLoaded', function () {
             allMessages[currentIndex].style.display = 'none';
             currentIndex--;
             allMessages[currentIndex].style.display = 'block';
-            allMessages[currentIndex].classList.add('highlight');
-            const tempIndex = currentIndex;
+            const messageContentDiv = allMessages[currentIndex].querySelector('div[data-testid="message_content"]');
+            messageContentDiv.classList.add('highlight');
             setTimeout(() => {
-                allMessages[tempIndex].classList.remove('highlight');
+                messageContentDiv.classList.remove('highlight');
             }, 500);
-            allMessages[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
     }
 
