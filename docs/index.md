@@ -19,6 +19,7 @@ title: AI个性化学习案例
 
 
 ## 英语
+1. [制定英语学习计划](english/English_learning_plan.html)
 
 ## 物理
 1. [杠杆题(直接回答)](physics/lever.html)
@@ -34,6 +35,7 @@ title: AI个性化学习案例
 
 ## 历史
 1. [秦始皇焚书坑儒](history/fenshukengru.html)
+1. [明朝开国皇帝](history/ming_dynasty.html)
 
 # 通用AI学习
 
