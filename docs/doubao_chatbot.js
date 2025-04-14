@@ -25,8 +25,58 @@ document.addEventListener('DOMContentLoaded', function () {
         currentIndex = 0;
     }
 
+    // 初始化状态变量，用于判断是否正在打印中
+    let isTyping = false;
+
+    // 提取 typeNode 函数为独立的异步函数
+    async function typeNode(node, target) {
+        if (node.nodeType === Node.TEXT_NODE) {
+            const text = node.textContent;
+            for (let i = 0; i < text.length; i++) {
+                await new Promise(resolve => setTimeout(() => {
+                    target.appendChild(document.createTextNode(text[i]));
+                    resolve();
+                }, 10)); // 控制打字速度
+            }
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+            let clonedElement;
+            const tagName = node.tagName.toLowerCase();
+            if (['svg', 'path', 'g', 'rect', 'circle', 'line', 'polyline', 'polygon', 'ellipse', 'text', 'tspan', 'use', 'defs', 'clipPath', 'filter', 'mask', 'pattern', 'symbol', 'linearGradient', 'radialGradient', 'stop'].includes(tagName)) {
+                // 使用 createElementNS 创建 SVG 元素
+                clonedElement = document.createElementNS('http://www.w3.org/2000/svg', node.tagName);
+            } else {
+                // 使用 createElement 创建普通元素
+                clonedElement = document.createElement(node.tagName);
+            }
+
+            for (const attr of node.attributes) {
+                clonedElement.setAttribute(attr.name, attr.value);
+            }
+            target.appendChild(clonedElement);
+
+            for (const child of node.childNodes) {
+                await typeNode(child, clonedElement);
+            }
+        }
+    }
+
     // 显示下一条消息的函数
     function showNextMessage() {
+        // 如果当前有消息正在打印中，立即完成打印并返回
+        if (isTyping && currentIndex < allMessages.length) {
+            const currentMessage = allMessages[currentIndex];
+            const messageContentDiv = currentMessage.querySelector('div[data-testid="message_content"]');
+            if (messageContentDiv) {
+                // 立即显示完整内容
+                messageContentDiv.innerHTML = messageContentDiv.dataset.originalHtml || messageContentDiv.innerHTML;
+                setTimeout(() => {
+                    messageContentDiv.classList.remove('highlight');
+                }, 300);
+                isTyping = false; // 标记打印完成
+            }
+            return;
+        }
+
         if (currentIndex < allMessages.length - 1) {
             currentIndex++;
             const message = allMessages[currentIndex];
@@ -57,41 +107,13 @@ document.addEventListener('DOMContentLoaded', function () {
             // 清空消息内容
             messageContentDiv.innerHTML = '';
 
-            async function typeNode(node, target) {
-                if (node.nodeType === Node.TEXT_NODE) {
-                    const text = node.textContent;
-                    for (let i = 0; i < text.length; i++) {
-                        await new Promise(resolve => setTimeout(() => {
-                            target.appendChild(document.createTextNode(text[i]));
-                            resolve();
-                        }, 10)); // 控制打字速度
-                    }
-                } else if (node.nodeType === Node.ELEMENT_NODE) {
-                    let clonedElement;
-                    const tagName = node.tagName.toLowerCase();
-                    if (['svg', 'path', 'g', 'rect', 'circle', 'line', 'polyline', 'polygon', 'ellipse', 'text', 'tspan', 'use', 'defs', 'clipPath', 'filter', 'mask', 'pattern', 'symbol', 'linearGradient', 'radialGradient', 'stop'].includes(tagName)) {
-                        // 使用 createElementNS 创建 SVG 元素
-                        clonedElement = document.createElementNS('http://www.w3.org/2000/svg', node.tagName);
-                    } else {
-                        // 使用 createElement 创建普通元素
-                        clonedElement = document.createElement(node.tagName);
-                    }
-
-                    for (const attr of node.attributes) {
-                        clonedElement.setAttribute(attr.name, attr.value);
-                    }
-                    target.appendChild(clonedElement);
-
-                    for (const child of node.childNodes) {
-                        await typeNode(child, clonedElement);
-                    }
-                }
-            }
+            isTyping = true; // 标记开始打印
 
             typeNode(tempContainer, messageContentDiv).then(() => {
                 setTimeout(() => {
                     messageContentDiv.classList.remove('highlight');
                 }, 300);
+                isTyping = false; // 标记打印完成
             });
         }
     }
