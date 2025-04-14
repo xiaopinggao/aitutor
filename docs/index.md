@@ -18,6 +18,7 @@ title: AI个性化学习案例
 
 1.  [有理数无理数](math/irrational_number.html)
 1.  [绝对值](math/absolute_value.html)
+1.  [解二元一次方程组](math/solve_equations.html)
 
 
 ## 英语
