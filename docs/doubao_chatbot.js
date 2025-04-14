@@ -6,6 +6,12 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentIndex = 0;
     let displayMode = 'all'; // 默认展示所有消息
 
+    // 解析 URL 参数
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('dm') === 'i') {
+        displayMode = 'interactive'; // 如果 URL 中有 dm=i，则进入交互模式
+    }
+
     // 初始化：隐藏除第一条消息外的所有消息
     function initializeMessages() {
         msg_list_ele.style.flexDirection = 'column-reverse';
@@ -113,27 +119,30 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 初始化消息显示
-    initializeMessages();
-    showAllMessages(); // 默认展示所有消息
+    if (displayMode === 'interactive') {
+        initializeMessages(); // 如果是交互模式，初始化为只显示第一条消息
+    } else {
+        showAllMessages(); // 默认展示所有消息
+    }
 
     // 监听键盘事件
     document.addEventListener('keydown', function (event) {
         switch (event.key) {
             case 'ArrowDown':
             case 'ArrowRight':
-                if (displayMode === 'one-by-one') {
+                if (displayMode === 'interactive') {
                     showNextMessage();
                 }
                 break;
             case 'ArrowUp':
             case 'ArrowLeft':
-                if (displayMode === 'one-by-one') {
+                if (displayMode === 'interactive') {
                     showPreviousMessage();
                 }
                 break;
             case 'i':
             case 'I':
-                displayMode = 'one-by-one';
+                displayMode = 'interactive';
                 initializeMessages(); // 重新初始化消息
                 break;
             case 'r':
