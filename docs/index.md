@@ -12,6 +12,7 @@ title: AI个性化学习案例
 # 学科AI辅导
 
 ## 语文
+1. [“退避三舍”成语辅导](chinese/clear_input.html)
 
 ## 数学
 
