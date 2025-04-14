@@ -27,6 +27,7 @@ title: AI个性化学习案例
 1. [杠杆题(直接回答)](physics/lever.html)
 1. [杠杆题(苏格拉底提问法)](physics/lever_socrates.html)
 1. [质量密度公式(苏格拉底提问法)](physics/roumv_socrates.html)
+1. [信号传输速度比较](physics/signal_speed.html)
 
 ## 化学
 
