@@ -35,6 +35,8 @@ title: AI个性化学习案例
 1. [物体质量密度公式(苏格拉底提问法)](physics/roumv_socrates.html)
 1. [信号传输速度比较](physics/signal_speed.html)
 1. [台灯电路故障分析](physics/lamp_diagnose.html)
+1. [杯子的压强与形状](physics/pressure_and_shape.html)
+
 
 ## 化学
 
