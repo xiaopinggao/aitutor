@@ -23,6 +23,7 @@ title: AI个性化学习案例
 1.  [有理数无理数辅导(苏格拉底提问法)](math/irrational_number.html)
 1.  [绝对值求和比较](math/absolute_value.html)
 1.  [解二元一次方程组](math/solve_equations.html)
+1.  [数圆圈数量(AI幻觉)](math/Olympic_rings.html)
 
 
 ## 英语
@@ -54,6 +55,9 @@ title: AI个性化学习案例
 ## 预习
 
 ## 苏格拉底提问法
+1.  [有理数无理数辅导(苏格拉底提问法)](math/irrational_number.html)
+1. [求解杠杆题(苏格拉底提问法)](physics/lever_socrates.html)
+1. [物体质量密度公式(苏格拉底提问法)](physics/roumv_socrates.html)
 
 ## 作业检查
 
