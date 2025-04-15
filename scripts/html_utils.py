@@ -99,3 +99,76 @@ def insert_default_resources(html_content):
         script_tag.insert_after(link_chat_styles)
         link_chat_styles.insert_after(link_font_awesome)
     return str(soup)
+
+
+def fix_page_meta_info(html_content, server_base_url, file_relative_path):
+    """
+    提取并替换 HTML 中的 OpenGraph 信息
+    :param html_content: 输入的 HTML 内容
+    :param server_base_url: 服务器基础路径，例如 'https://xiaopinggao.github.io/aitutor'
+    :param file_relative_path: 文件的相对路径，例如 '/physics/lamp_diagnose.html'
+    :return: 包含更新 OpenGraph 信息的 HTML 内容
+    """
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    # 提取页面标题作为 og:title
+    title_tag = soup.find('title')
+    og_title = title_tag.string if title_tag else '默认标题'
+
+    # 拼接服务器路径和文件相对路径作为 og:url
+    og_url = f"{server_base_url.rstrip('/')}/{file_relative_path.lstrip('/')}"
+
+    # 截取页面文本内容的前一段字符作为 og:description
+    text_content = soup.get_text(separator=' ', strip=True)
+    og_description = text_content[:100] + ('...' if len(text_content) > 100 else '')
+
+    # 更新或创建 OpenGraph meta 标签
+    opengraph_data = {
+        'og:title': og_title,
+        'og:type': 'website', # 固定 og:type 为 website
+        'og:url': og_url,
+        'og:description': og_description,
+    }
+
+    for property_name, content_value in opengraph_data.items():
+        if content_value is not None:
+            old_meta = soup.find('meta', attrs={'property': property_name})
+            if old_meta:
+                # 修改现有的 meta 标签
+                old_meta['content'] = content_value
+            else:
+                # 创建新的 meta 标签
+                new_meta = soup.new_tag('meta', property=property_name, content=content_value)
+                soup.head.append(new_meta)
+
+    # 移除原有的 og:image 标签
+    old_og_image = soup.find('meta', attrs={'property': 'og:image'})
+    if old_og_image:
+        old_og_image.decompose()
+
+    # 新增：更新或创建 <link rel="canonical"> 标签
+    canonical_link = soup.find('link', attrs={'rel': 'canonical'})
+    if canonical_link:
+        canonical_link['href'] = og_url
+    else:
+        new_canonical_link = soup.new_tag('link', rel='canonical', href=og_url)
+        soup.head.append(new_canonical_link)
+
+    # 更新 description 标签的内容为 og:description 的值
+    description_meta = soup.find('meta', attrs={'name': 'description'})
+    if description_meta:
+        description_meta['content'] = og_description
+    else:
+        new_description_meta = soup.new_tag('meta', name='description', content=og_description)
+        soup.head.append(new_description_meta)
+
+    # 更新 keywords 标签的内容为新的关键词列表
+    keywords_meta = soup.find('meta', attrs={'name': 'keywords'})
+    new_keywords = "豆荚AI学堂,AI个性化学习,AI写作,AI辅导作业,AI学习,AI提分,AI升学"
+    if keywords_meta:
+        keywords_meta['content'] = new_keywords
+    else:
+        new_keywords_meta = soup.new_tag('meta', name='keywords', content=new_keywords)
+        soup.head.append(new_keywords_meta)
+
+    return str(soup)

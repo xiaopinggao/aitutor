@@ -16,16 +16,9 @@ mkdir -p "$HTML_DIR"
 # 递归遍历src目录下的所有html文件
 find "$SRC_DIR" -type f -name "*.html" -not -name "index.html" | while read -r file; do
     # 获取文件相对于src目录的路径
-    relative_path="${file#$SRC_DIR/}"
-    # 获取文件所在的子目录
-    dir_path=$(dirname "$relative_path")
-    # 创建对应的子目录（如果不存在）
-    mkdir -p "$HTML_DIR/$dir_path"
-    # 获取文件名
-    file_name=$(basename "$file")
-    # 构建输出文件路径
-    output_file="$HTML_DIR/$relative_path"
+    src_file="${file#$SRC_DIR/}"
+
     # 调用process_html.py处理文件
-    echo python "$SCRIPT_DIR/process_html.py" "$file" "$output_file" --banner_path "$SRC_DIR/banner.txt" --footer_path "$SRC_DIR/footer.txt"
-    python "$SCRIPT_DIR/process_html.py" "$file" "$output_file" --banner_path "$SRC_DIR/banner.txt" --footer_path "$SRC_DIR/footer.txt"
+    echo python "$SCRIPT_DIR/process_html.py" --src_dir "$SRC_DIR" --output_dir "$HTML_DIR" --src_file "$src_file"
+    python "$SCRIPT_DIR/process_html.py" --src_dir "$SRC_DIR" --output_dir "$HTML_DIR" --src_file "$src_file"
 done

@@ -17,19 +17,24 @@ import sys
 import logging
 from html_utils import remove_specific_divs, add_banner_and_footer
 from html_utils import remove_csp_meta, insert_default_resources
+from html_utils import fix_page_meta_info
 
 # 设置日志配置
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def process_html_file(input_file, output_file, banner_path, footer_path):
+
+def process_html_file(src_dir, output_dir, relative_file_path, banner_file, footer_file):
     """
     处理单个 HTML 文件
-    :param input_file: 输入 HTML 文件路径
-    :param output_file: 输出 HTML 文件路径
-    :param banner_path: banner 文件的路径
-    :param footer_path: footer 文件的路径
+    :param src_dir: 源文件目录路径
+    :param output_dir: 输出文件目录路径
+    :param relative_file_path: 源文件相对路径
+    :param banner_file: banner 文件名
+    :param footer_file: footer 文件名
     """
     try:
+        # 构造完整的输入文件路径
+        input_file = os.path.join(src_dir, relative_file_path)
         with open(input_file, 'r', encoding='utf-8') as f:
             html_content = f.read()
 
@@ -42,18 +47,26 @@ def process_html_file(input_file, output_file, banner_path, footer_path):
             'div[data-testid="chat_footer_skill_bar"]',
             'div[data-testid="chat_input"]',
             'div[class*="footer-"] > div[class*="container-"] > div[class*="inner-"]',
-            ]
+        ]
         html_content = remove_specific_divs(html_content, css_selectors)
 
         # 移除 CSP meta 标签
         html_content = remove_csp_meta(html_content)
 
+        server_base_url = 'https://xiaopinggao.github.io/aitutor'
+        html_content = fix_page_meta_info(html_content, server_base_url, relative_file_path)
+
         # 插入默认资源
         html_content = insert_default_resources(html_content)
 
         # 添加 banner 和 footer
+        banner_path = os.path.join(src_dir, banner_file)
+        footer_path = os.path.join(src_dir, footer_file)
         html_content = add_banner_and_footer(html_content, banner_path, footer_path)
 
+        # 构造完整的输出文件路径
+        output_file = os.path.join(output_dir, relative_file_path)
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)  # 确保目标目录存在
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(html_content)
         logging.info(f"已处理 {input_file}，处理后的文件保存到 {output_file}")
@@ -68,11 +81,12 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Process a single HTML file by adding a banner and footer.")
-    parser.add_argument("input_file", help="Path to the input HTML file")
-    parser.add_argument("output_file", help="Path to the output HTML file")
-    parser.add_argument("--banner_path", default='banner.txt', help="Path to the banner file (default: banner.txt)")
-    parser.add_argument("--footer_path", default='footer.txt', help="Path to the footer file (default: footer.txt)")
+    parser.add_argument("--src_dir", required=True, help="源文件目录路径")
+    parser.add_argument("--output_dir", required=True, help="输出文件目录路径")
+    parser.add_argument("--src_file", required=True, help="源文件相对路径")
+    parser.add_argument("--banner", default='banner.txt', help="Path to the banner file (default: banner.txt)")
+    parser.add_argument("--footer", default='footer.txt', help="Path to the footer file (default: footer.txt)")
 
     args = parser.parse_args()
 
-    process_html_file(args.input_file, args.output_file, args.banner_path, args.footer_path)
+    process_html_file(args.src_dir, args.output_dir, args.src_file, args.banner, args.footer)
