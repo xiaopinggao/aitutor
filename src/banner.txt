@@ -1,0 +1,47 @@
+<div id="page-banner">
+  <div class="banner-button">
+    <a href="../index.html">
+      <i class="fas fa-home"></i>
+    </a>
+  </div>
+  <div class="title">
+    <h1>__TITLE__</h1>
+  </div>
+  <div class="banner-button">
+    <a href="#" id="share-button">
+      <i class="fas fa-share-alt"></i>
+    </a>
+  </div>
+</div>
+
+<script>
+document.getElementById('share-button').addEventListener('click', function(event) {
+  event.preventDefault();
+  const shareData = {
+    title: document.title,
+    text: '给你分享好用的AI教程!',
+    url: window.location.href
+  };
+
+  // Check if navigator.share is available
+  if (navigator.share) {
+    navigator.share(shareData)
+      .then(() => console.log('Successfully shared'))
+      .catch((error) => console.error('Error sharing', error));
+  } else {
+    // Fallback for browsers that do not support navigator.share
+    // Create a shareable link
+    const shareUrl = window.location.href;
+    // 复制到剪贴板
+    navigator.clipboard.writeText(shareUrl)
+      .then(() => {
+        alert('已复制链接: ' + shareUrl);
+      })
+      .catch(err => {
+        console.error('无法复制文本: ', err);
+      });
+  }
+
+});
+
+</script>

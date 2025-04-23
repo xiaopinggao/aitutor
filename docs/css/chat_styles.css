@@ -1,0 +1,52 @@
+.highlight {
+    background-color: rgba(255, 255, 0, 0.3);
+    transition: background-color 1s ease;
+}
+
+@keyframes send-message {
+    0% { transform: translateY(20px); opacity: 0; }
+    60% { transform: translateY(0); opacity: 1; box-shadow: 0 0 20px 15px rgba(255, 255, 0, 0.8); }
+    100% { box-shadow: 0 0 0px 0px rgba(255, 255, 0, 0); }
+}
+.send-message-animation {
+    animation: send-message 0.5s ease-out;
+}
+#page-footer {
+    text-align: center;
+    /* margin: 1em 0 1em 0; */
+    padding: 0.5em 0 0.5em 0;
+    font-size: 14px;
+    width: 100%;
+    border-top: 1px solid gainsboro;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1); /* 添加朝上的阴影效果 */
+}
+#page-banner {
+    text-align: center;
+    font-size: 14px;
+    width: 100%;
+    border-bottom: 1px solid gainsboro;
+    background: linear-gradient(0deg, #f4f4f4, #f4f4f4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+}
+#page-banner .banner-button{
+    width: 4em;
+    font-size: 1.5em;
+}
+#page-banner .banner-button a{
+    text-decoration: none;
+    color: inherit;
+}
+#page-banner h1 {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 2em; /* 默认字体大小 */
+}
+
+@media (max-width: 600px) {
+    #page-banner h1 {
+        font-size: 1.5em; /* 缩小 h1 标题的字体大小 */
+    }
+}
