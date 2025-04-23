@@ -24,6 +24,9 @@ jobs:
               relative_path=${filepath#./}
               full_url="https://xiaopinggao.github.io/aitutor/${relative_path}"
               sed -i '/<title/ i\<base href="'"$full_url"'">' "$filepath"
+              echo "✅ Injected base tag in $filepath with $full_url"
+            else
+              echo "⚠️ Already has base tag: $filepath"
             fi
           done
 
