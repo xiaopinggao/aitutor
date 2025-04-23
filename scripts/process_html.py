@@ -17,7 +17,7 @@ import sys
 import logging
 from html_utils import remove_specific_divs, add_banner_and_footer
 from html_utils import remove_csp_meta, insert_default_resources
-from html_utils import fix_page_meta_info
+from html_utils import fix_page_meta_info, extract_and_save_first_image
 
 # 设置日志配置
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -58,6 +58,9 @@ def process_html_file(src_dir, output_dir, relative_file_path, banner_file, foot
 
         # 插入默认资源
         html_content = insert_default_resources(html_content, server_base_url)
+
+        # 提取并保存第一张图片
+        html_content = extract_and_save_first_image(html_content, output_dir, relative_file_path, server_base_url)
 
         # 添加 banner 和 footer
         banner_path = os.path.join(src_dir, banner_file)

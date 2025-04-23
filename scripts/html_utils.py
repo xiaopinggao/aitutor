@@ -142,11 +142,6 @@ def fix_page_meta_info(html_content, server_base_url, file_relative_path):
                 new_meta = soup.new_tag('meta', property=property_name, content=content_value)
                 soup.head.append(new_meta)
 
-    # 移除原有的 og:image 标签
-    old_og_image = soup.find('meta', attrs={'property': 'og:image'})
-    if old_og_image:
-        old_og_image.decompose()
-
     # 新增：更新或创建 <link rel="canonical"> 标签
     canonical_link = soup.find('link', attrs={'rel': 'canonical'})
     if canonical_link:
@@ -173,3 +168,56 @@ def fix_page_meta_info(html_content, server_base_url, file_relative_path):
         soup.head.append(new_keywords_meta)
 
     return str(soup)
+
+
+def extract_and_save_first_image(html_content, output_dir, relative_file_path, server_base_url):
+    """
+    提取网页中的第一张内嵌图片并保存为本地文件，同时更新 og:image 字段。
+    :param html_content: 输入的 HTML 内容
+    :param output_dir: 输出文件目录路径
+    :param relative_file_path: 源文件相对路径
+    :param server_base_url: 服务器基础路径
+    :return: 更新后的 HTML 内容
+    """
+    from bs4 import BeautifulSoup
+    import base64
+    import os
+
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    # 仅在 <div data-testid="message-list"><picture> 区块下寻找第一张图片
+    img_tag = soup.select_one('div[data-testid="message-list"] picture img[src^="data:image"]')
+
+    if img_tag:
+        # 提取图片数据
+        img_data = img_tag['src'].split(',')[1]
+        img_format = img_tag['src'].split(';')[0].split('/')[-1]
+
+        # 去除文件名中的 .html 后缀
+        base_name = os.path.splitext(relative_file_path)[0]
+        img_path = os.path.join(output_dir, 'imgs', f"{base_name}.{img_format}")
+
+        # 确保目标目录存在
+        os.makedirs(os.path.dirname(img_path), exist_ok=True)
+
+        # 保存图片
+        with open(img_path, 'wb') as f:
+            f.write(base64.b64decode(img_data))
+
+        # 更新 og:image 字段
+        og_image_url = f"{server_base_url.rstrip('/')}/imgs/{base_name}.{img_format}"
+        old_og_image = soup.find('meta', attrs={'property': 'og:image'})
+        if old_og_image:
+            old_og_image['content'] = og_image_url
+        else:
+            og_image_meta = soup.new_tag('meta', property='og:image', content=og_image_url)
+            soup.head.append(og_image_meta)
+
+        return str(soup)
+    else:
+            # 移除原有的 og:image 标签
+        old_og_image = soup.find('meta', attrs={'property': 'og:image'})
+        if old_og_image:
+            old_og_image.decompose()
+
+        return str(soup)
