@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # 或你使用的默认分支
+      - main
 
 permissions:
   contents: write
@@ -16,14 +16,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Inject <base> tag into HTML
+      - name: Insert <base> tag before <title> with full path (in /docs)
+        working-directory: ./docs
         run: |
-          find . -name "*.html" | while read file; do
-            if ! grep -q '<base href="https://xiaopinggao.github.io/aitutor/"' "$file"; then
-              sed -i 's|<title|<base href="https://xiaopinggao.github.io/aitutor/"><title|' "$file"
-              echo "✅ Injected base tag in $file"
-            else
-              echo "⚠️ Already has base tag: $file"
+          for filepath in $(find . -name "*.html"); do
+            if ! grep -q '<base href=' "$filepath"; then
+              relative_path=${filepath#./}
+              full_url="https://xiaopinggao.github.io/aitutor/${relative_path}"
+              sed -i '/<title/ i\<base href="'"$full_url"'">' "$filepath"
             fi
           done
 
@@ -31,5 +31,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
-
+          publish_dir: ./docs
