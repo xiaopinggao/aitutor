@@ -57,7 +57,7 @@ def process_html_file(src_dir, output_dir, relative_file_path, banner_file, foot
         html_content = fix_page_meta_info(html_content, server_base_url, relative_file_path)
 
         # 插入默认资源
-        html_content = insert_default_resources(html_content)
+        html_content = insert_default_resources(html_content, server_base_url)
 
         # 添加 banner 和 footer
         banner_path = os.path.join(src_dir, banner_file)
