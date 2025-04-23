@@ -140,7 +140,7 @@ def fix_page_meta_info(html_content, server_base_url, file_relative_path):
             else:
                 # 创建新的 meta 标签
                 new_meta = soup.new_tag('meta', property=property_name, content=content_value)
-                soup.head.append(new_meta)
+                title_tag.insert_before(new_meta)
 
     # 新增：更新或创建 <link rel="canonical"> 标签
     canonical_link = soup.find('link', attrs={'rel': 'canonical'})
@@ -148,7 +148,7 @@ def fix_page_meta_info(html_content, server_base_url, file_relative_path):
         canonical_link['href'] = og_url
     else:
         new_canonical_link = soup.new_tag('link', rel='canonical', href=og_url)
-        soup.head.append(new_canonical_link)
+        title_tag.insert_before(new_meta)
 
     # 更新 description 标签的内容为 og:description 的值
     description_meta = soup.find('meta', attrs={'name': 'description'})
@@ -156,7 +156,7 @@ def fix_page_meta_info(html_content, server_base_url, file_relative_path):
         description_meta['content'] = og_description
     else:
         new_description_meta = soup.new_tag('meta', name='description', content=og_description)
-        soup.head.append(new_description_meta)
+        title_tag.insert_before(new_meta)
 
     # 更新 keywords 标签的内容为新的关键词列表
     keywords_meta = soup.find('meta', attrs={'name': 'keywords'})
@@ -165,7 +165,7 @@ def fix_page_meta_info(html_content, server_base_url, file_relative_path):
         keywords_meta['content'] = new_keywords
     else:
         new_keywords_meta = soup.new_tag('meta', name='keywords', content=new_keywords)
-        soup.head.append(new_keywords_meta)
+        title_tag.insert_before(new_meta)
 
     return str(soup)
 
@@ -211,7 +211,8 @@ def extract_and_save_first_image(html_content, output_dir, relative_file_path, s
             old_og_image['content'] = og_image_url
         else:
             og_image_meta = soup.new_tag('meta', property='og:image', content=og_image_url)
-            soup.head.append(og_image_meta)
+            title_tag = soup.find('title')
+            title_tag.insert_before(og_image_meta)
 
         return str(soup)
     else:
