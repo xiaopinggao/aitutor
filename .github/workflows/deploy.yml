@@ -1,0 +1,32 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # 或你使用的默认分支
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Inject <base> tag into HTML
+        run: |
+          find . -name "*.html" | while read file; do
+            if ! grep -q '<base href="https://xiaopinggao.github.io/aitutor/"' "$file"; then
+              sed -i 's|<title|<base href="https://xiaopinggao.github.io/aitutor/"><title|' "$file"
+              echo "✅ Injected base tag in $file"
+            else
+              echo "⚠️ Already has base tag: $file"
+            fi
+          done
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+
