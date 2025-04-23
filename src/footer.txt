@@ -1,3 +1,0 @@
-<div id="page-footer">
-  <p>© 2025 豆荚AI学堂出品</p>
-</div>
