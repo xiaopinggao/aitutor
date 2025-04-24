@@ -46,6 +46,7 @@ def process_html_file(src_dir, output_dir, relative_file_path, banner_file, foot
             'div[data-testid="suggest_message_list"]',
             'div[data-testid="chat_footer_skill_bar"]',
             'div[data-testid="chat_input"]',
+            'div[data-testid="chat_list_wrapper"]',
             'div[class*="footer-"] > div[class*="container-"] > div[class*="inner-"]',
         ]
         html_content = remove_specific_divs(html_content, css_selectors)

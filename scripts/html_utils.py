@@ -9,8 +9,8 @@ Author: Phillips Gao
 Date: 2025-3-30
 """
 
-from bs4 import BeautifulSoup
 import logging
+from bs4 import BeautifulSoup
 
 # 设置日志配置
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -115,15 +115,18 @@ def fix_page_meta_info(html_content, server_base_url, file_relative_path):
     # 提取页面标题作为 og:title
     title_tag = soup.find('title')
     og_title = title_tag.string if title_tag else '默认标题'
+    og_title = og_title.strip()
 
     # 拼接服务器路径和文件相对路径作为 og:url
     og_url = f"{server_base_url.rstrip('/')}/{file_relative_path.lstrip('/')}"
 
     # 截取页面文本内容的前一段字符作为 og:description
     text_content = soup.get_text(separator=' ', strip=True)
-    import re
-    title_pattern = re.escape(og_title)  # 转义标题内容以防止特殊字符干扰
-    text_content = re.sub(f"^{title_pattern}\\s*", "", text_content, count=1)  # 去掉开头的 title 内容
+
+    # 修改为直接按字符串匹配去除标题
+    if text_content.startswith(og_title):
+        text_content = text_content[len(og_title):].lstrip()
+
     og_description = text_content[:100] + ('...' if len(text_content) > 100 else '')
 
     # 更新或创建 OpenGraph meta 标签
