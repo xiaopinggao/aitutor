@@ -121,12 +121,15 @@ def fix_page_meta_info(html_content, server_base_url, file_relative_path):
 
     # 截取页面文本内容的前一段字符作为 og:description
     text_content = soup.get_text(separator=' ', strip=True)
+    import re
+    title_pattern = re.escape(og_title)  # 转义标题内容以防止特殊字符干扰
+    text_content = re.sub(f"^{title_pattern}\\s*", "", text_content, count=1)  # 去掉开头的 title 内容
     og_description = text_content[:100] + ('...' if len(text_content) > 100 else '')
 
     # 更新或创建 OpenGraph meta 标签
     opengraph_data = {
         'og:title': og_title,
-        'og:type': 'website', # 固定 og:type 为 website
+        'og:type': 'website',  # 固定 og:type 为 website
         'og:url': og_url,
         'og:description': og_description,
     }

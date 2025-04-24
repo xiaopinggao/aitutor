@@ -45,6 +45,7 @@ title: AI个性化学习案例
 1. [鱼的呼吸与气体的溶解](biology/gas_dissolution.html)
 
 ## 地理
+1. [地理气候知识图谱整理](geography/climate_knowledge_graph.html)
 
 ## 历史
 1. [解释秦始皇焚书坑儒](history/fenshukengru.html)
