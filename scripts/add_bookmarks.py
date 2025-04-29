@@ -90,17 +90,19 @@ def add_bookmarks(input_pdf):
     print(f"✅ 已保存带书签的 PDF 文件到：{input_pdf}")
 
 def main():
-    if len(sys.argv) != 2:
-        print("用法：python add_bookmarks.py 输入文件.pdf")
+    if len(sys.argv) < 2:
+        print("用法：python add_bookmarks.py 输入文件1.pdf 输入文件2.pdf ...")
         sys.exit(1)
 
-    input_pdf = sys.argv[1]
+    input_pdfs = sys.argv[1:]
 
-    if not os.path.exists(input_pdf):
-        print(f"❌ 输入文件不存在：{input_pdf}")
-        sys.exit(1)
+    for input_pdf in input_pdfs:
+        if not os.path.exists(input_pdf):
+            print(f"❌ 输入文件不存在：{input_pdf}")
+            continue
 
-    add_bookmarks(input_pdf)
+        print(f"处理文件: {input_pdf}")
+        add_bookmarks(input_pdf)
 
 if __name__ == "__main__":
     main()
