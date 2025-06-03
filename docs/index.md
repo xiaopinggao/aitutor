@@ -15,6 +15,7 @@ title: AI个性化学习案例
 1. [“退避三舍”成语辅导](chinese/clear_input.html)
 1. [班级春游活动设计](chinese/outing_planning.html)
 1. [专业设计师策划春游活动](chinese/outing_planning_pro.html)
+1. [“一件难忘的事”作文辅导](chinese/chinese_composition.html)
 
 
 
